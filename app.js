@@ -239,3 +239,33 @@ if (modeSelect) {
     }
   });
 }
+
+document.getElementById("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+
+  // Usa la URL del web app (exec) que obtuviste al desplegar en Google Apps Script
+  const url = "https://script.google.com/macros/s/YOUR_DEPLOY_ID/exec";
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      body: formData, // NO poner headers aquí
+    });
+
+    // Si el endpoint responde JSON
+    const json = await res.json();
+    console.log("Respuesta servidor:", json);
+
+    // mostrar mensaje de éxito
+    document.getElementById("message").style.display = "block";
+    document.getElementById("message").textContent =
+      "Datos enviados correctamente.";
+  } catch (err) {
+    console.error("Error al enviar:", err);
+    document.getElementById("message").style.display = "block";
+    document.getElementById("message").textContent =
+      "Error al enviar los datos. Revisa la consola.";
+  }
+});
